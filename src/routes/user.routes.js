@@ -10,6 +10,10 @@ router.post('/register',
     userMiddleware.registerUserValidation,
     userController.createUserController)
 
+router.post('/login',
+    userMiddleware.loginUserValidation,
+    userController.loginUserController)
+
 
 
 export default router;
