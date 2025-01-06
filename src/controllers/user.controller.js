@@ -3,7 +3,6 @@ import { validationResult } from "express-validator";
 import * as userService from "../services/user.service.js";
 
 
-
 export const createUserController = async (req, res) => {
 
 
@@ -44,9 +43,7 @@ export const loginUserController = async (req, res) => {
 
         const token = user.generateToken();
 
-
         return res.status(200).json({ user, token });
-
 
     } catch (error) {
         console.log(error);
