@@ -23,6 +23,11 @@ router.get('/profile',
 
 )
 
+router.get('/logout',
+    userMiddleware.authUser,
+    userController.logoutUserController
+)
+
 
 
 export default router;
