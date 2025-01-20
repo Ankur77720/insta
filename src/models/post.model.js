@@ -7,7 +7,7 @@ const postSchema = new mongoose.Schema({
         type: String,
     },
     media: {
-        type: String,
+        type: Object,
         required: [ true, 'Media is required' ],
     },
     author: {

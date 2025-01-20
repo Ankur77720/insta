@@ -27,5 +27,4 @@ export const uploadFile = (fileBuffer) => {
             )
         Readable.from(fileBuffer).pipe(uploadStream)
     })
-
 }
