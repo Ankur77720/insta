@@ -15,6 +15,10 @@ const postSchema = new mongoose.Schema({
         ref: 'user',
         required: [ true, 'Author is required' ],
     },
+    likesCount: {
+        type: Number,
+        default: 0
+    }
 },
     {
         timestamps: true,
@@ -53,6 +57,35 @@ postSchema.statics.getRecentPosts = async function (limit) {
     const posts = await this.find().sort({ createdAt: -1 }).limit(limit);
 
     return posts;
+
+}
+
+
+postSchema.statics.isValidPostId = async function (postId) {
+
+    if (!postId) {
+        throw new Error("Post is required")
+    }
+
+    const isValidPostId = mongoose.Types.ObjectId.isValid(postId);
+
+    return isValidPostId;
+
+}
+
+postSchema.methods.incrementLikeCount = async function () {
+
+    this.likesCount += 1;
+    await this.save();
+    return this;
+
+}
+
+postSchema.methods.decrementLikeCount = async function () {
+
+    this.likesCount -= 1;
+    await this.save();
+    return this;
 
 }
 
