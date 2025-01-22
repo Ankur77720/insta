@@ -15,5 +15,9 @@ router.patch("/like/:postId",
     userMiddleware.authUser,
     postController.likePost
 )
+router.patch("/remove-like/:postId",
+    userMiddleware.authUser,
+    postController.removeLikePost
+)
 
 export default router;

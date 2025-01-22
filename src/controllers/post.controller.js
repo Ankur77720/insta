@@ -48,8 +48,6 @@ export const likePost = async (req, res, next) => {
 
         const postId = req.params.postId;
 
-        console.log(postId);
-
         if (!postModel.isValidPostId(postId)) {
             return res.status(400).json({ message: "Invalid Post ID" });
         }
@@ -82,6 +80,51 @@ export const likePost = async (req, res, next) => {
         console.log(err);
         res.status(500).send("Internal Server Error");
     }
+}
 
+export const removeLikePost = async (req, res, next) => {
+
+    try {
+
+        const postId = req.params.postId;
+
+        if (!postModel.isValidPostId(postId)) {
+            return res.status(400).json({ message: "Invalid Post ID" });
+        }
+
+        const post = await postModel.findById(postId);
+
+        if (!post) {
+            return res.status(404).json({ message: "Post not found" });
+        }
+
+
+        const userLikedPost = await likeModel.findOne({
+            post: postId,
+            user: req.user._id
+        })
+
+
+        if (!userLikedPost) {
+            return res.status(200).json({ message: "Post not liked" });
+        }
+
+        await likeModel.findOneAndDelete({
+            post: postId,
+            user: req.user._id
+        })
+
+        await post.decrementLikeCount();
+
+        res.status(200).json({ message: "Post unliked" });
+
+
+
+    } catch (err) {
+
+        console.log(err);
+        res.status(500).send("Internal Server Error");
+
+    }
 
 }
