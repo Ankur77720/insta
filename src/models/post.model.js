@@ -48,18 +48,20 @@ postSchema.methods.updateCaption = async function (caption) {
     return this;
 }
 
-postSchema.statics.getRecentPosts = async function (limit) {
+postSchema.statics.getRecentPosts = async function (limit, skip = 0) {
 
     if (!limit) {
         throw new Error("Limit is required")
     }
 
-    const posts = await this.find().sort({ createdAt: -1 }).limit(limit);
+    const posts = await this.find().sort({ createdAt: -1 })
+        .limit(limit > 10 ? 10 : limit)
+        .skip(skip)
+        .populate('author');
 
     return posts;
 
 }
-
 
 postSchema.statics.isValidPostId = async function (postId) {
 
