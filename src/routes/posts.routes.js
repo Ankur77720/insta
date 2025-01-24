@@ -16,7 +16,6 @@ router.get('/get-recent',
     postController.getAllPosts
 )
 
-
 router.get('/get/:postId',
     userMiddleware.authUser,
     postController.getPost
@@ -30,6 +29,13 @@ router.patch("/like/:postId",
 router.patch("/remove-like/:postId",
     userMiddleware.authUser,
     postController.removeLikePost
+)
+
+
+router.post('/comment',
+    userMiddleware.authUser,
+    postMiddleware.validateComment,
+    postController.commentOnPost
 )
 
 export default router;
