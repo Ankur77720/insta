@@ -21,12 +21,10 @@ const model = genAI.getGenerativeModel({
     `
 });
 
-
 async function generateContent(prompt) {
     const result = await model.generateContent(prompt);
     return result.response.text()
 }
-
 
 export const generateCaptionFromImageBuffer = async (imageBuffer) => {
 

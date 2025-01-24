@@ -18,6 +18,10 @@ const postSchema = new mongoose.Schema({
     likesCount: {
         type: Number,
         default: 0
+    },
+    commentsCount: {
+        type: Number,
+        default: 0
     }
 },
     {
@@ -89,6 +93,21 @@ postSchema.methods.decrementLikeCount = async function () {
     await this.save();
     return this;
 
+}
+
+postSchema.methods.incrementCommentCount = async function () {
+
+    this.commentsCount += 1;
+    await this.save();
+    return this;
+
+}
+
+postSchema.methods.decrementCommentCount = async function () {
+
+    this.commentsCount -= 1;
+    await this.save();
+    return this;
 }
 
 const postModel = mongoose.model("post", postSchema);

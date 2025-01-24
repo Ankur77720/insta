@@ -1,7 +1,6 @@
 import userModel from "../models/user.js";
 
 
-
 export const createUser = async ({ username, email, password, }) => {
 
     if (!username || !email || !password) {
