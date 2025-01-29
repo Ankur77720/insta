@@ -1,5 +1,7 @@
 import { Server } from "socket.io";
 import userModel from "../models/user.js";
+import mongoose from "mongoose";
+import messageModel from "../models/message.model.js";
 
 
 function initSocket(server) {
@@ -42,14 +44,45 @@ function initSocket(server) {
         socket.join(socket.user._id.toString())
 
 
-        socket.on("chat-message", (data) => {
+        socket.on("chat-message", async (data) => {
 
-            const { sender, receiver, text } = data
+            try {
 
-            io.to(receiver).emit("chat-message", {
-                sender,
-                text,
-            })
+                const { receiver, text } = data
+
+                if (!text || !receiver || !text.trim() || !receiver.trim()) {
+                    return
+                }
+
+                const sender = socket.user
+
+                const isValidReceiver = mongoose.Types.ObjectId.isValid(receiver)
+
+                if (!isValidReceiver) {
+                    return
+                }
+
+                const counterPart = await userModel.findById(receiver)
+
+                if (!counterPart) {
+                    return
+                }
+
+
+                await messageModel.create({
+                    sender: sender._id,
+                    receiver: counterPart._id,
+                    text
+                })
+
+                io.to(receiver).emit("chat-message", {
+                    sender,
+                    receiver: counterPart,
+                    text,
+                })
+            } catch (err) {
+                console.log(err)
+            }
 
         })
 
