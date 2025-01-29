@@ -20,12 +20,16 @@ router.get('/profile',
     (req, res) => {
         res.json(req.user);
     }
-
 )
 
 router.get('/logout',
     userMiddleware.authUser,
     userController.logoutUserController
+)
+
+router.get('/get-messages',
+    userMiddleware.authUser,
+    userController.getMessagesController
 )
 
 
